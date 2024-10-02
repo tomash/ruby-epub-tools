@@ -7,4 +7,4 @@ Rationale: Amazon's tools for adding a new epub to one's library, either via sen
 
 `mobi.rb` is an experiment to make a similar renamer for mobi files. Should not be needed.
 
-`rezip` is for rezipping epubs from one of polish epub providers. They tend to zip the files in a way that makes them incompatible with Archive::Zip used by `epub-parser` that's in turn used by `renamer.rb`. I'll look later if I can make Archive::Zip work with those zip files, but for now this simple script works.
+`rezip` is for rezipping epubs from one of polish epub providers. They tend to zip the files in a way that makes them incompatible with Archive::Zip used by `epub-parser` that's in turn used by `renamer.rb`. I'll look later if I can make Archive::Zip work with those zip files, but for now this simple script works. No longer needed since `renamer` now has a monkeypatch to make it work with the zip files created by aforementioned providers.

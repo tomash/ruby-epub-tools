@@ -13,6 +13,48 @@ else
   puts "#{epub_path} ..."
 end
 
+module Archive
+  class Zip
+    module Entry
+      # Compares the local and the central file records found in _lfr_ and _cfr
+      # respectively.  Raises Archive::Zip::EntryError if the comparison fails.
+      def self.compare_file_records(lfr, cfr)
+        # Exclude the extra fields from the comparison since some implementations,
+        # such as InfoZip, are known to have differences in the extra fields used
+        # in local file records vs. central file records.
+        if lfr.zip_path != cfr.zip_path then
+          raise Zip::EntryError, "zip path differs between local and central file records: `#{lfr.zip_path}' != `#{cfr.zip_path}'"
+        end
+        if lfr.extraction_version != cfr.extraction_version then
+          if(cfr.zip_path == "mimetype")
+            # known problem for mimetype file, tolerating
+          else
+            raise Zip::EntryError, "`#{cfr.zip_path}': extraction version differs between local and central file records"
+          end
+        end
+        if lfr.crc32 != cfr.crc32 then
+          raise Zip::EntryError, "`#{cfr.zip_path}': CRC32 differs between local and central file records"
+        end
+        if lfr.compressed_size != cfr.compressed_size then
+          raise Zip::EntryError, "`#{cfr.zip_path}': compressed size differs between local and central file records"
+        end
+        if lfr.uncompressed_size != cfr.uncompressed_size then
+          raise Zip::EntryError, "`#{cfr.zip_path}': uncompressed size differs between local and central file records"
+        end
+        if lfr.general_purpose_flags != cfr.general_purpose_flags then
+          raise Zip::EntryError, "`#{cfr.zip_path}': general purpose flag differs between local and central file records"
+        end
+        if lfr.compression_method != cfr.compression_method then
+          raise Zip::EntryError, "`#{cfr.zip_path}': compression method differs between local and central file records"
+        end
+        if lfr.mtime != cfr.mtime then
+          raise Zip::EntryError, "`#{cfr.zip_path}': last modified time differs between local and central file records"
+        end
+      end
+    end
+  end
+end
+
 def parse_and_extract_metadata(epub_path)
   book = EPUB::Parser.parse(epub_path)
   md = book.package.metadata
