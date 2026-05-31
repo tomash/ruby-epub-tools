@@ -1,6 +1,6 @@
 # ruby-epub-tools
 
-See `/agent/AGENTS.md` for the multi-repo workspace layout.
+Multi-repo workspace: `wallabag2epub`, `epubrenamer`, and **`bookformer`** (`repos/bookformer`, `https://github.com/tomash/bookformer`) live alongside this repo under `/agent/repos/`.
 
 ## Cursor Cloud specific instructions
 
